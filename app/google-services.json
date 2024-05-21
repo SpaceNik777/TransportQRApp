@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640397668849",
+    "project_id": "transporthotline-af61d",
+    "storage_bucket": "transporthotline-af61d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640397668849:android:1d3e1b280d4c8a3ed11450",
+        "android_client_info": {
+          "package_name": "com.rut.transportqr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwupvSpU_AW9B6fp-zDJ5GpelRRQsRgUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
