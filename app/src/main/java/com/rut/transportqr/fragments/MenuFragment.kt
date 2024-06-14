@@ -15,14 +15,14 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.rut.transportqr.R
-import com.rut.transportqr.barcodeScannerOptions.ScanOptionsHelper
+import com.rut.transportqr.qrcodeScannerOptions.ScanOptionsHelper
 import com.rut.transportqr.model.ComplaintModel
 
 class MenuFragment : Fragment() {
     private val viewModel: ComplaintViewModel by activityViewModels()
     private lateinit var codeTRTextView: TextView
     private val scanOptionsHelper = ScanOptionsHelper()
-    private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+    private val qrCodeScannerLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
         ScanContract()
     ) { result: ScanIntentResult ->
         if (result.contents == null) {
@@ -36,7 +36,15 @@ class MenuFragment : Fragment() {
                 viewModel.setComplaint(complaint)
             } else {
                 val complaintModel =
-                    ComplaintModel(result.contents, null, null, null, null, null, null, null)
+                    ComplaintModel(
+                        result.contents,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
                 viewModel.setComplaint(complaintModel)
             }
             updateUI()
@@ -61,7 +69,7 @@ class MenuFragment : Fragment() {
         updateUI()
         scanQRButton.setOnClickListener {
             val options = scanOptionsHelper.createOptions()
-            barcodeLauncher.launch(options)
+            qrCodeScannerLauncher.launch(options)
         }
         toEnterTRCodeFragmentButton.setOnClickListener {
             controller.navigate(R.id.action_menuFragment_to_enterTransportCodeFragment)

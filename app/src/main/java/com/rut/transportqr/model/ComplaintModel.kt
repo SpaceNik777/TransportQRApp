@@ -11,10 +11,8 @@ data class ComplaintModel(
     private var photoFilePath: String?,
     private var senderEmail: String?,
     private var probability: String?,
-    private var photoUrl: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -32,7 +30,6 @@ data class ComplaintModel(
         parcel.writeString(photoFilePath)
         parcel.writeString(senderEmail)
         parcel.writeString(probability)
-        parcel.writeString(photoUrl)
     }
 
     override fun describeContents(): Int {
@@ -105,11 +102,4 @@ data class ComplaintModel(
         return imageProblemClass
     }
 
-    fun setPhotoUri(pUri: String?) {
-        photoUrl = pUri
-    }
-
-    fun getPhotoUri(): String? {
-        return photoUrl
-    }
 }

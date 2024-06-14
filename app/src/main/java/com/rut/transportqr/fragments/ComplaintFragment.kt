@@ -1,7 +1,9 @@
 package com.rut.transportqr.fragments
 
+import android.os.Build
 import com.rut.transportqr.viewModel.ComplaintViewModel
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,11 +12,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textview.MaterialTextView
 import com.rut.transportqr.R
 import com.rut.transportqr.databinding.FragmentComplaintBinding
+import com.rut.transportqr.imageCompressor.ImageCompressor
+import com.rut.transportqr.model.PostComplaintModel
 import java.io.File
 
 class ComplaintFragment : Fragment() {
@@ -28,11 +34,13 @@ class ComplaintFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sendButton = view.findViewById<Button>(R.id.sendButton)
         val imgName = view.findViewById<TextView>(R.id.imgNameTextView)
         val complaint = viewModel.complaintModel.value
+        val controller = findNavController()
         if (complaint != null) {
             imgName.text = complaint.getPhotoFilePath()?.let { it1 -> File(it1).name }
         }
@@ -51,20 +59,25 @@ class ComplaintFragment : Fragment() {
                     complaint.getHeader()?.let { it1 ->
                         viewModel.setComplaint(complaint)
                         binding.sendButton.visibility = View.GONE
-                        viewModel.startSendingComplaint()
-                        viewModel.isComplaintSent.observe(viewLifecycleOwner) { isComplaintSent ->
-                            if (isComplaintSent) {
-                                // Перейти на MenuFragment
-                                findNavController().navigate(R.id.menuFragment)
-                                // Сбросить флаг isComplaintSent
-                                viewModel.setIsComplaintSent(false)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Обращение успешно отправлено!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        viewModel.sendComplaint()
+                        viewModel.myResponse.observe(viewLifecycleOwner, Observer { response ->
+                            if (response.isSuccessful) {
+                                val complaintResponse = response.body()
+                                if (complaintResponse != null) {
+                                    Log.d("Response", complaintResponse.toString())
+                                    controller.navigate(R.id.action_complaintFragment_to_menuFragment)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Обращение успешно отправлено!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } else {
+                                Log.d("Response", response.errorBody().toString())
+                                binding.sendButton.visibility = View.VISIBLE
                             }
-                        }
+                        })
+
                     }
                 } else {
                     Toast.makeText(requireContext(), "Incorrect Email", Toast.LENGTH_SHORT).show()

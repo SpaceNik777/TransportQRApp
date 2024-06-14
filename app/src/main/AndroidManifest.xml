@@ -19,6 +19,7 @@
         android:roundIcon="@drawable/qrcode_scan"
         android:supportsRtl="true"
         android:theme="@style/Theme.TransportQR"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

@@ -136,7 +136,6 @@ class PhotoFragment : Fragment() {
                             null,
                             photoFile.absolutePath,
                             null,
-                            null,
                             null
                         )
                         viewModel.setComplaint(newComplaint)

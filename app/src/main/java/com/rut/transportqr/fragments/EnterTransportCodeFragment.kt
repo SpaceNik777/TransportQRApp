@@ -44,7 +44,6 @@ class EnterTransportCodeFragment : Fragment() {
                         null,
                         null,
                         null,
-                        null,
                         null
                     )
                     viewModel.setComplaint(complaintModel)
